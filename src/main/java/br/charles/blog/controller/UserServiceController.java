@@ -14,7 +14,7 @@ import br.charles.blog.service.UserService;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 public class UserServiceController {
 	
 	@Autowired

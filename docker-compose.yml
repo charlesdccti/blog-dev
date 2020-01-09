@@ -1,5 +1,17 @@
 version: '3.7'
 services:
+  mongodb:
+    container_name: user-api-db
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_DATA_DIR=/data/db
+    ports:
+      - 27017:27017
+    networks: 
+        - production-network
+
   app:
     container_name: user-api-app
     restart: always
@@ -11,30 +23,17 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/user_db
     ports:
       - 8080:8080
+    command: mvn spring-boot:run
+    networks: 
+        - production-network
     depends_on:
       - mongodb
-    networks: 
-      - backend
-    command: mvn spring-boot:run
-
-  mongodb:
-    container_name: user-api-db
-    image: mongo
-    volumes:
-      - mongo-data:/data/db
-    environment:
-      - MONGO_DATA_DIR=/data/db
-    ports:
-      - 27017:27017
-    networks: 
-      - backend
-
-networks:
-  backend:
-    driver: bridge
 
 volumes:
   mongo-data:
     driver: local
     name: mongo-data
-  
+ 
+networks: 
+    production-network:
+        driver: bridge
